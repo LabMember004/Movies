@@ -1,7 +1,8 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    id("com.android.library")
+    kotlin("android")
     alias(libs.plugins.kotlin.compose)
+
 }
 
 android {
@@ -9,11 +10,8 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.domain"
         minSdk = 24
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -36,6 +34,9 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"  // Ensure this matches the version you're using
     }
 }
 

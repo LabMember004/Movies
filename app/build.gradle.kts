@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+
 }
 
 android {
@@ -27,16 +28,13 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "1.8"  // Change to 1.8 or adjust according to your needs
     }
-    buildFeatures {
-        compose = true
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"  // Ensure this matches the version you're using
     }
+
 }
 
 dependencies {
@@ -56,4 +54,10 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(project(":presentation"))
+    implementation(project(":domain"))
+    implementation(project(":data"))
+
+
+
 }
