@@ -4,21 +4,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.entity.Movies
 import com.example.domain.useCase.GetMoviesUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.lang.Exception
+import javax.inject.Inject
 
-class AllMoviesScreenViewModel(private val getMoviesUseCase: GetMoviesUseCase): ViewModel() {
+@HiltViewModel
+class AllMoviesScreenViewModel @Inject constructor(
+    private val getMoviesUseCase: GetMoviesUseCase
+) : ViewModel() {
     private val _data = MutableStateFlow<List<Movies>>(emptyList())
     val data: StateFlow<List<Movies>> = _data.asStateFlow()
 
-    // Add a loading state
     private val _loading = MutableStateFlow(false)
     val loading: StateFlow<Boolean> = _loading.asStateFlow()
 
-    // Add an error state to manage failure
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
 
@@ -27,7 +29,6 @@ class AllMoviesScreenViewModel(private val getMoviesUseCase: GetMoviesUseCase): 
             _loading.value = true
             try {
                 val response = getMoviesUseCase(page, genres, releaseYear, query)
-                // Assuming the response contains a list of Movies
                 _data.value = response.data
             } catch (e: Exception) {
                 _error.value = "Failed to fetch movies: ${e.message}"

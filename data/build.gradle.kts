@@ -2,6 +2,8 @@ plugins {
     id("com.android.library")
     kotlin("android")
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 
 }
 
@@ -64,8 +66,9 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
 
-    implementation ("io.insert-koin:koin-android:3.2.0")
-    implementation ("io.insert-koin:koin-core:3.2.0")
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+
+    implementation ("com.google.dagger:hilt-android:2.51.1")
+    kapt ("com.google.dagger:hilt-android-compiler:2.51.1")
 }

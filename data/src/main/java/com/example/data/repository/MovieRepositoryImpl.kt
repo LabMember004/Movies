@@ -4,8 +4,9 @@ import com.example.data.mapper.toMovieResponse
 import com.example.data.netwok.MovieApiService
 import com.example.domain.entity.MoviesResponse
 import com.example.domain.repository.MovieRepository
+import javax.inject.Inject
 
-class MovieRepositoryImpl(
+class MovieRepositoryImpl @Inject constructor(
     private val movieApiService: MovieApiService
 ): MovieRepository {
     override suspend fun getMovies(
