@@ -7,7 +7,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.entity.Movies
-import com.example.domain.entity.MoviesResponse
 import com.example.domain.useCase.GetMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,11 +16,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AllMoviesScreenViewModel @Inject constructor(
+class BrowsePageViewModel @Inject constructor(
     private val getMoviesUseCase: GetMoviesUseCase
 ) : ViewModel() {
     private val _data = MutableStateFlow<List<Movies>>(emptyList())
     val data: StateFlow<List<Movies>> = _data.asStateFlow()
+
 
 
     private val _error = MutableStateFlow<String?>(null)

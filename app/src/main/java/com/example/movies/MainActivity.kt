@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.movies.ui.theme.MoviesTheme
-import com.example.presentation.AllMoviesPage.AllMoviesScreen
+import com.example.presentation.MovieApp
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MoviesTheme {
-                AllMoviesScreen(viewModel = hiltViewModel())
+                MovieApp()
             }
         }
     }

@@ -1,6 +1,5 @@
 package com.example.presentation.AllMoviesPage
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -10,11 +9,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.domain.entity.Movies
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun AllMoviesScreen(viewModel: AllMoviesScreenViewModel) {
+fun BrowsePageScreen(viewModel: BrowsePageViewModel = hiltViewModel()) {
     val moviesState by viewModel.data.collectAsState()
     val isLoading = viewModel.isLoading
     val isEndReached = viewModel.isEndReached
@@ -67,7 +69,7 @@ fun AllMoviesScreen(viewModel: AllMoviesScreenViewModel) {
 }
 
 @Composable
-fun MovieItem(movie: Movies) {
+fun MovieItem(movie: Movies ) {
     Card(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = movie.title, style = MaterialTheme.typography.titleMedium)
