@@ -3,7 +3,7 @@ package com.example.data.mapper
 import com.example.data.model.AllMovies
 import com.example.domain.entity.Movies
 
-fun AllMovies.toMovies(): Movies {
+ fun AllMovies.toMovies(): Movies {
     return Movies(
         id = this._id,
         title = this.title,
