@@ -5,4 +5,5 @@ enum class Screen(val route: String) {
     Home("home"),
     Favorite("favorite"),
     Profile("profile")
+
 }
