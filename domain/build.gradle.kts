@@ -38,7 +38,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"  // Ensure this matches the version you're using
+        kotlinCompilerExtensionVersion = "1.5.1"
     }
 }
 
@@ -62,4 +62,8 @@ dependencies {
 
     implementation ("com.google.dagger:hilt-android:2.51.1")
     kapt ("com.google.dagger:hilt-android-compiler:2.51.1")
+
+    testImplementation("io.mockk:mockk:1.13.5")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
+
 }
