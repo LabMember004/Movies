@@ -14,6 +14,17 @@ fun RegisterRequestDTO.toRegisterRequest(): RegisterRequest {
     )
 }
 
+
+fun RegisterRequest.toRegisterRequestDTO(): RegisterRequestDTO {
+    return RegisterRequestDTO(
+        name = this.name,
+        email = this.email,
+        password = this.password,
+        confirmPassword = this.confirmPassword
+    )
+}
+
+
 fun RegisterResponseDTO.toRegisterResponse(): RegisterResponse {
     return RegisterResponse(
         message = this.message,

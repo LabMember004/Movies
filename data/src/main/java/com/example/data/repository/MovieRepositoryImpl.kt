@@ -1,6 +1,7 @@
 package com.example.data.repository
 
 import com.example.data.mapper.toMovieResponse
+import com.example.data.mapper.toRegisterRequestDTO
 import com.example.data.mapper.toRegisterResponse
 import com.example.data.mapper.toSectionResponse
 import com.example.data.model.RegisterRequestDTO
@@ -32,12 +33,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun register(registerRequest: RegisterRequest): Result<RegisterResponse> {
         return try {
-            val registerRequestDTO = RegisterRequestDTO(
-                name = registerRequest.name,
-                email = registerRequest.email,
-                password = registerRequest.password,
-                confirmPassword = registerRequest.confirmPassword
-            )
+            val registerRequestDTO = registerRequest.toRegisterRequestDTO()
             val response = movieApiService.register(registerRequestDTO)
             Result.success(response.toRegisterResponse())
         } catch (e: Exception) {

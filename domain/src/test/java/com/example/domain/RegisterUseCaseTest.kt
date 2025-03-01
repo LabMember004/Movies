@@ -43,7 +43,7 @@ class RegisterUseCaseTest {
 
     @Test
     fun `invoke should return failure when repository fails`() = runBlocking {
-        // Given
+
         val request = RegisterRequest(
             name = "Heshar",
             email = "heshar@gmail.com",
@@ -54,10 +54,8 @@ class RegisterUseCaseTest {
 
         coEvery { movieRepository.register(any()) } returns Result.failure(exception)
 
-        // When
         val result = registerUseCase(request.name, request.email, request.password, request.confirmPassword)
 
-        // Then
         coVerify(exactly = 1) { movieRepository.register(any()) }
         assertEquals(Result.failure<RegisterResponse>(exception), result)
     }
