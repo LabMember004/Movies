@@ -30,13 +30,19 @@ class MovieRepositoryImpl @Inject constructor(
 
     }
 
-    override suspend fun register(registerRequest: RegisterRequest): RegisterResponse {
-        val registerRequestDTO = RegisterRequestDTO(
-            name = registerRequest.name,
-            email = registerRequest.email,
-            password = registerRequest.password,
-            confirmPassword = registerRequest.confirmPassword
-        )
-        return movieApiService.register(registerRequestDTO).toRegisterResponse()
+    override suspend fun register(registerRequest: RegisterRequest): Result<RegisterResponse> {
+        return try {
+            val registerRequestDTO = RegisterRequestDTO(
+                name = registerRequest.name,
+                email = registerRequest.email,
+                password = registerRequest.password,
+                confirmPassword = registerRequest.confirmPassword
+            )
+            val response = movieApiService.register(registerRequestDTO)
+            Result.success(response.toRegisterResponse())
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
+
 }
