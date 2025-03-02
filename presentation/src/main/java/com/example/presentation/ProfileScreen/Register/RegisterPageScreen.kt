@@ -1,16 +1,18 @@
-package com.example.presentation.ProfileScreen
+package com.example.presentation.ProfileScreen.Register
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 
 @Composable
-fun ProfilePageScreen(viewModel: ProfileViewModel = hiltViewModel()) {
+fun ProfilePageScreen(viewModel: RegisterViewModel = hiltViewModel() , onNavigateToRegister : () -> Unit) {
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -34,6 +36,14 @@ fun ProfilePageScreen(viewModel: ProfileViewModel = hiltViewModel()) {
         }) {
             Text("Register")
         }
+
+        Text(
+            text = "Login" ,
+            color = Color.Blue,
+            modifier = Modifier.clickable {
+                onNavigateToRegister()
+            }
+        )
         Spacer(modifier = Modifier.height(16.dp))
 
         viewModel.registerState.collectAsState().value?.let { result ->
@@ -46,8 +56,4 @@ fun ProfilePageScreen(viewModel: ProfileViewModel = hiltViewModel()) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewProfilePageScreen() {
-    ProfilePageScreen()
-}
+
