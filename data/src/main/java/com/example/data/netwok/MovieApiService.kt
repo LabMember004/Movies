@@ -1,14 +1,18 @@
 package com.example.data.netwok
 
 import com.example.data.model.AllMoviesResponse
+import com.example.data.model.FavoriteRequestDTO
 import com.example.data.model.LoginRequestDTO
 import com.example.data.model.LoginResponseDTO
 import com.example.data.model.RegisterRequestDTO
 import com.example.data.model.RegisterResponseDTO
 import com.example.data.model.SectionResponseDTO
+import okhttp3.ResponseBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -31,6 +35,13 @@ suspend fun register(
 
 @POST("auth/login")
 suspend fun login(@Body request : LoginRequestDTO): LoginResponseDTO
+
+
+@POST("favorites")
+suspend fun addToFavorites(
+    @Header("Authorization") token: String,
+    @Body request: FavoriteRequestDTO
+): Response<ResponseBody>
 
 
 
