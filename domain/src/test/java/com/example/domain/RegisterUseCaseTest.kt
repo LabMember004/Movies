@@ -3,6 +3,7 @@ package com.example.domain
 import com.example.domain.entity.RegisterRequest
 import com.example.domain.entity.RegisterResponse
 import com.example.domain.repository.MovieRepository
+import com.example.domain.repository.UserRepository
 import com.example.domain.useCase.RegisterUseCase
 import io.mockk.*
 import kotlinx.coroutines.runBlocking
@@ -12,12 +13,12 @@ import org.junit.Test
 
 class RegisterUseCaseTest {
 
-    private val movieRepository: MovieRepository = mockk()
+    private val userRepository: UserRepository = mockk()
     private lateinit var registerUseCase: RegisterUseCase
 
     @Before
     fun setUp() {
-        registerUseCase = RegisterUseCase(movieRepository)
+        registerUseCase = RegisterUseCase(userRepository)
     }
 
     @Test
@@ -31,13 +32,13 @@ class RegisterUseCaseTest {
         )
         val expectedResponse = RegisterResponse(success = true, message = "Registration successful")
 
-        coEvery { movieRepository.register(any()) } returns Result.success(expectedResponse)
+        coEvery { userRepository.register(any()) } returns Result.success(expectedResponse)
 
 
         val result = registerUseCase(request.name, request.email, request.password, request.confirmPassword)
 
 
-        coVerify(exactly = 1) { movieRepository.register(any()) }
+        coVerify(exactly = 1) { userRepository.register(any()) }
         assertEquals(Result.success(expectedResponse), result)
     }
 
@@ -52,11 +53,11 @@ class RegisterUseCaseTest {
         )
         val exception = Exception("Registration failed")
 
-        coEvery { movieRepository.register(any()) } returns Result.failure(exception)
+        coEvery { userRepository.register(any()) } returns Result.failure(exception)
 
         val result = registerUseCase(request.name, request.email, request.password, request.confirmPassword)
 
-        coVerify(exactly = 1) { movieRepository.register(any()) }
+        coVerify(exactly = 1) { userRepository.register(any()) }
         assertEquals(Result.failure<RegisterResponse>(exception), result)
     }
 }

@@ -4,10 +4,11 @@ import android.net.http.HttpException
 import com.example.domain.entity.RegisterRequest
 import com.example.domain.entity.RegisterResponse
 import com.example.domain.repository.MovieRepository
+import com.example.domain.repository.UserRepository
 import javax.inject.Inject
 
 class RegisterUseCase @Inject constructor(
-    private val moviesRepository: MovieRepository
+    private val userRepository: UserRepository
 ) {
     suspend operator fun invoke(
         name: String,
@@ -15,7 +16,7 @@ class RegisterUseCase @Inject constructor(
         password: String,
         confirmPassword: String
     ): Result<RegisterResponse> {
-        return moviesRepository.register(RegisterRequest(name, email, password, confirmPassword))
+        return userRepository.register(RegisterRequest(name, email, password, confirmPassword))
     }
 
 

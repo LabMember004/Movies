@@ -12,5 +12,4 @@ interface MovieRepository {
 
     suspend fun getSections(): SectionResponse
 
-     suspend fun register(registerRequest: RegisterRequest): Result <RegisterResponse>
 }
