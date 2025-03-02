@@ -1,6 +1,8 @@
 package com.example.data.netwok
 
 import com.example.data.model.AllMoviesResponse
+import com.example.data.model.LoginRequestDTO
+import com.example.data.model.LoginResponseDTO
 import com.example.data.model.RegisterRequestDTO
 import com.example.data.model.RegisterResponseDTO
 import com.example.data.model.SectionResponseDTO
@@ -26,6 +28,10 @@ suspend fun getSections(): SectionResponseDTO
 suspend fun register(
     @Body registerRequestDTO: RegisterRequestDTO
 ): RegisterResponseDTO
+
+@POST("auth/login")
+suspend fun login(@Body request : LoginRequestDTO): LoginResponseDTO
+
 
 
 
