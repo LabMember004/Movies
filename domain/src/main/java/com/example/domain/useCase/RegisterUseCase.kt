@@ -1,5 +1,6 @@
 package com.example.domain.useCase
 
+import android.net.http.HttpException
 import com.example.domain.entity.RegisterRequest
 import com.example.domain.entity.RegisterResponse
 import com.example.domain.repository.MovieRepository
@@ -13,7 +14,9 @@ class RegisterUseCase @Inject constructor(
         email: String,
         password: String,
         confirmPassword: String
-    ): Result <RegisterResponse> {
+    ): Result<RegisterResponse> {
         return moviesRepository.register(RegisterRequest(name, email, password, confirmPassword))
     }
+
+
 }
