@@ -22,22 +22,26 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.domain.entity.Movies
 import com.example.presentation.AllMoviesPage.BrowsePageViewModel
+import com.example.presentation.FavoritesPage.FavoriteViewModel
 
 @Composable
 fun MovieDetailsScreen(
     movieId: String,
     navController: NavController,
-    viewModel: BrowsePageViewModel = hiltViewModel()
+    viewModel: BrowsePageViewModel = hiltViewModel(),
 ) {
     val movie = viewModel.data.collectAsState().value.find { it.id == movieId }
 
@@ -49,20 +53,22 @@ fun MovieDetailsScreen(
     }
 
     if (movie != null) {
-        MovieDetailsContent(movie = movie, navController = navController)
+        MovieDetailsContent(movie = movie, navController = navController , viewModel)
     } else {
         // Show a loading state until the movie data is fetched
         Text(text = "Loading...")
     }
 }
-
 @Composable
 fun MovieDetailsContent(
     movie: Movies,
     navController: NavController,
-
+    viewModel: BrowsePageViewModel,
+    favoriteViewModel: FavoriteViewModel = hiltViewModel()
 
 ) {
+    // Handle adding to favorites and navigating to the FavoriteMoviesScreen
+    val isFavorite = remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -92,14 +98,17 @@ fun MovieDetailsContent(
             )
             IconButton(
                 onClick = {
-
+                    // Mark as favorite
+                    isFavorite.value = !isFavorite.value
+                    if (isFavorite.value) {
+                        // Add movie to favorites (Call your ViewModel function here)
+                        favoriteViewModel.addFavoriteMovie(movie.id, "yourTokenHere")
+                    }
                 }
             ) {
-                Icon(
-                    imageVector = Icons.Filled.Favorite,
-                    contentDescription = "Favorite",
-
-                    modifier = Modifier.size(32.dp)
+                Text(
+                    text = if (isFavorite.value) "❤️" else "🤍", // Heart emoji for favorite state
+                    fontSize = 32.sp
                 )
             }
         }
@@ -132,7 +141,9 @@ fun MovieDetailsContent(
         ) {
             Text("Back")
         }
+
     }
 }
+
 
 
