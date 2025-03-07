@@ -1,8 +1,12 @@
 package com.example.movies.di
 
+import android.content.Context
+import com.example.data.TokenRepository
 import com.example.data.netwok.MovieApiService
 import com.example.data.repository.MovieRepositoryImpl
+import com.example.data.repository.TokenRepositoryImpl
 import com.example.data.repository.UserRepositoryImpl
+import com.example.domain.TokenRepositoryDomain
 import com.example.domain.repository.MovieRepository
 import com.example.domain.repository.UserRepository
 import com.example.domain.useCase.GetMoviesUseCase
@@ -10,7 +14,9 @@ import com.example.domain.useCase.RegisterUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import org.intellij.lang.annotations.PrintFormat
 import javax.inject.Singleton
 
 @Module
@@ -38,5 +44,11 @@ object RepositoryModule {
     @Singleton
     fun provideRegisterUseCase(userRepository: UserRepository): RegisterUseCase {
         return RegisterUseCase(userRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTokenRepository(@ApplicationContext context:Context): TokenRepositoryDomain {
+        return TokenRepositoryImpl(context)
     }
 }

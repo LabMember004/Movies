@@ -28,9 +28,12 @@ fun LoginPageScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
+
+
     val loginState = viewModel.registerState.collectAsState()
 
     val context = LocalContext.current
+    val tokenState by viewModel.tokenState.collectAsState()
 
     LaunchedEffect(loginState.value) {
         loginState.value?.onSuccess {
@@ -38,6 +41,14 @@ fun LoginPageScreen(
         }
         loginState.value?.onFailure {
             Toast.makeText(context, "Login Failed: ${it.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    LaunchedEffect(tokenState) {
+        tokenState?.let {
+            if(it.isNotEmpty()) {
+                Toast.makeText(context, "User Already Logged in" , Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
