@@ -25,29 +25,22 @@ import androidx.hilt.navigation.compose.hiltViewModel
 fun LoginPageScreen(
     viewModel: LoginViewModel = hiltViewModel()
 ) {
-    // Remembering the state of the email and password
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    // Observe login state
     val loginState = viewModel.registerState.collectAsState()
 
-    // Get context for displaying Toasts
     val context = LocalContext.current
 
-    // Observe loginState and show a message based on success/failure
     LaunchedEffect(loginState.value) {
         loginState.value?.onSuccess {
-            // Handle login success (e.g., show Toast)
             Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
         }
         loginState.value?.onFailure {
-            // Handle login failure (e.g., show error message)
             Toast.makeText(context, "Login Failed: ${it.message}", Toast.LENGTH_SHORT).show()
         }
     }
 
-    // UI for the login screen
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -59,7 +52,6 @@ fun LoginPageScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Email input
         BasicTextField(
             value = email,
             onValueChange = { email = it },
@@ -78,7 +70,6 @@ fun LoginPageScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Password input
         BasicTextField(
             value = password,
             onValueChange = { password = it },
@@ -97,10 +88,8 @@ fun LoginPageScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Login Button
         Button(
             onClick = {
-                // Call loginUser when the button is pressed
                 viewModel.loginUser(email, password)
             },
             modifier = Modifier.fillMaxWidth()

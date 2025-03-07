@@ -38,7 +38,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"  // Ensure this matches the version you're using
+        kotlinCompilerExtensionVersion = "1.5.1"
     }
 }
 

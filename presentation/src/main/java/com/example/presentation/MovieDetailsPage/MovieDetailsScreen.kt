@@ -34,8 +34,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.domain.entity.Movies
+import com.example.ourmovies.presentation.viewModels.FavoriteViewModel
 import com.example.presentation.AllMoviesPage.BrowsePageViewModel
-import com.example.presentation.FavoritesPage.FavoriteViewModel
 
 @Composable
 fun MovieDetailsScreen(

@@ -31,10 +31,10 @@ android {
         }
     }
     kotlinOptions {
-        jvmTarget = "1.8"  // Change to 1.8 or adjust according to your needs
+        jvmTarget = "1.8"
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"  // Ensure this matches the version you're using
+        kotlinCompilerExtensionVersion = "1.5.1"
     }
 
 }
