@@ -1,7 +1,6 @@
 package com.example.movies.di
 
 import android.content.Context
-import com.example.data.TokenRepository
 import com.example.data.netwok.MovieApiService
 import com.example.data.repository.MovieRepositoryImpl
 import com.example.data.repository.TokenRepositoryImpl
@@ -17,7 +16,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import org.intellij.lang.annotations.PrintFormat
 import javax.inject.Singleton
 
 @Module
