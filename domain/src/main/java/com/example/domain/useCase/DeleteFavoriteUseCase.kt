@@ -6,7 +6,7 @@ import javax.inject.Inject
 class DeleteFavoriteUseCase @Inject constructor(
     private val movieRepository: MovieRepository
 ) {
-    suspend operator fun invoke(token: String, favoriteId: String): Result<Unit> {
-        return movieRepository.deleteFavorite(token,favoriteId)
+    suspend operator fun invoke( favoriteId: String): Result<Unit> {
+        return movieRepository.deleteFavorite(favoriteId)
     }
 }

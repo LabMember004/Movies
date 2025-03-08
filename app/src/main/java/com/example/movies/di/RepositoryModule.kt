@@ -11,6 +11,7 @@ import com.example.domain.repository.MovieRepository
 import com.example.domain.repository.UserRepository
 import com.example.domain.useCase.GetMoviesUseCase
 import com.example.domain.useCase.RegisterUseCase
+import com.example.domain.useCase.TokenUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,8 +26,8 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideMovieRepository(movieApiService: MovieApiService): MovieRepository {
-        return MovieRepositoryImpl(movieApiService)
+    fun provideMovieRepository(movieApiService: MovieApiService, tokenUseCase: TokenUseCase): MovieRepository {
+        return MovieRepositoryImpl(movieApiService, tokenUseCase)
     }
 
     @Provides
@@ -51,4 +52,5 @@ object RepositoryModule {
     fun provideTokenRepository(@ApplicationContext context:Context): TokenRepositoryDomain {
         return TokenRepositoryImpl(context)
     }
+
 }

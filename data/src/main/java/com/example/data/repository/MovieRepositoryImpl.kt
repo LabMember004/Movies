@@ -1,5 +1,6 @@
 package com.example.data.repository
 
+import android.util.Log
 import com.example.data.mapper.toFavoriteRequestDTO
 import com.example.data.mapper.toMovieResponse
 import com.example.data.mapper.toMovies
@@ -16,13 +17,15 @@ import com.example.domain.entity.RegisterRequest
 import com.example.domain.entity.RegisterResponse
 import com.example.domain.entity.SectionResponse
 import com.example.domain.repository.MovieRepository
+import com.example.domain.useCase.TokenUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(
-    private val movieApiService: MovieApiService
+    private val movieApiService: MovieApiService,
+    private val tokenUseCase: TokenUseCase
 ): MovieRepository {
     override suspend fun getMovies(
         page: Int,
@@ -39,27 +42,29 @@ class MovieRepositoryImpl @Inject constructor(
 
     }
 
-    override suspend fun addToFavorites(token: String, request: FavoriteRequest): Result<Unit> {
+    override suspend fun addToFavorites(request: FavoriteRequest): Result<Unit> {
         return try {
-            // Map the domain object (FavoriteRequest) to the data object (FavoriteRequestDTO)
-            val requestDTO = request.toFavoriteRequestDTO()
-
-            // Perform the API call
-            val response = movieApiService.addToFavorites(token, requestDTO)
+            val response = movieApiService.addToFavorites(request.toFavoriteRequestDTO())
+            Log.d("MovieRepositoryImpl", "Response Code: ${response.code()}")
+            Log.d("MovieRepositoryImpl", "Response Body: ${response.errorBody()?.string() ?: "No Error"}")
             if (response.isSuccessful) {
+                Log.d("MovieRepositoryImpl", "Favorite added successfully")
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("Failed to add to favorites"))
+                Log.e("MovieRepositoryImpl", "Failed to add favorite: ${response.errorBody()?.string()}")
+                Result.failure(Exception("Failed to add to favorites: ${response.errorBody()?.string()}"))
             }
         } catch (e: Exception) {
+            Log.e("MovieRepositoryImpl", "Exception while adding favorite: ${e.message}")
             Result.failure(e)
         }
     }
 
-    override suspend fun getFavorites(token: String): Result<List<Movies>> {
+
+    override suspend fun getFavorites(): Result<List<Movies>> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = movieApiService.getFavorites("Bearer $token")
+                val response = movieApiService.getFavorites()
                 if (response.isSuccessful) {
                     Result.success(response.body()?.map { it.toMovies() } ?: emptyList())
                 } else {
@@ -71,10 +76,10 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteFavorite(token: String, favoriteId: String): Result<Unit> {
+    override suspend fun deleteFavorite(favoriteId: String): Result<Unit> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = movieApiService.deleteFavorite(favoriteId, "Bearer $token")
+                val response = movieApiService.deleteFavorite(favoriteId)
                 if (response.isSuccessful) {
                     Result.success(Unit)
                 } else {
@@ -85,6 +90,7 @@ class MovieRepositoryImpl @Inject constructor(
             }
         }
     }
+
 
 
 

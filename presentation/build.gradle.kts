@@ -82,6 +82,9 @@ dependencies {
 
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
+
+
 
 
 }

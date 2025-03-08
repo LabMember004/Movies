@@ -15,14 +15,12 @@ interface MovieRepository {
     suspend fun getSections(): SectionResponse
 
     suspend fun addToFavorites(
-        token: String,
         request: FavoriteRequest
     ): Result<Unit>
 
     suspend fun getFavorites(
-        token: String
     ):Result <List<Movies>>
 
-    suspend fun deleteFavorite(token: String, favoriteId: String): Result<Unit>
+    suspend fun deleteFavorite( favoriteId: String): Result<Unit>
 
 }

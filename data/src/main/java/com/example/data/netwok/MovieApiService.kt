@@ -43,19 +43,15 @@ suspend fun login(@Body request : LoginRequestDTO): LoginResponseDTO
 
 @POST("favorites")
 suspend fun addToFavorites(
-    @Header("Authorization") token: String,
     @Body request: FavoriteRequestDTO
-): Response<ResponseBody>
+): Response<Unit>
 
     @GET("favorites")
-    suspend fun getFavorites(
-        @Header("Authorization") token: String
-    ): Response<List<AllMovies>>
+    suspend fun getFavorites(): Response<List<AllMovies>>
 
     @DELETE("favorites/{favoriteId}")
     suspend fun deleteFavorite(
         @Path("favoriteId") favoriteId: String,
-        @Header("Authorization") token: String
     ): Response<ResponseBody>
 
 

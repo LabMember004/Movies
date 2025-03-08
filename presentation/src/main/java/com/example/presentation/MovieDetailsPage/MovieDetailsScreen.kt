@@ -1,5 +1,6 @@
 package com.example.presentation.MovieDetailsPage
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,34 +44,38 @@ fun MovieDetailsScreen(
     movieId: String,
     navController: NavController,
     viewModel: BrowsePageViewModel = hiltViewModel(),
+    favoriteViewModel: FavoriteViewModel = hiltViewModel()
 ) {
     val movie = viewModel.data.collectAsState().value.find { it.id == movieId }
 
-
     LaunchedEffect(movieId) {
+        Log.d("MovieDetailsScreen", "Movie ID: $movieId, Fetching details...")
         if (movie == null) {
             viewModel.fetchMovies(1)
+            Log.d("MovieDetailsScreen", "Fetching movie list because movie is null")
+        } else {
+            Log.d("MovieDetailsScreen", "Movie found: ${movie.title}")
         }
     }
 
+    val isFavorite = remember { mutableStateOf(false) }
+
     if (movie != null) {
-        MovieDetailsContent(movie = movie, navController = navController , viewModel)
+        MovieDetailsContent(movie, navController, favoriteViewModel, isFavorite)
     } else {
-        // Show a loading state until the movie data is fetched
         Text(text = "Loading...")
+        Log.d("MovieDetailsScreen", "Movie not found, displaying loading state")
     }
 }
+
+
 @Composable
 fun MovieDetailsContent(
     movie: Movies,
     navController: NavController,
-    viewModel: BrowsePageViewModel,
-    favoriteViewModel: FavoriteViewModel = hiltViewModel()
-
+    favoriteViewModel: FavoriteViewModel,
+    isFavorite: MutableState<Boolean>
 ) {
-    // Handle adding to favorites and navigating to the FavoriteMoviesScreen
-    val isFavorite = remember { mutableStateOf(false) }
-
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -96,19 +102,18 @@ fun MovieDetailsContent(
                 text = movie.title,
                 modifier = Modifier.weight(1f)
             )
+
+            // Heart icon to favorite/unfavorite the movie
             IconButton(
                 onClick = {
-                    // Mark as favorite
-                    isFavorite.value = !isFavorite.value
-                    if (isFavorite.value) {
-                        // Add movie to favorites (Call your ViewModel function here)
-                        favoriteViewModel.addFavoriteMovie(movie.id, "yourTokenHere")
-                    }
+                    favoriteViewModel.addFavoriteMovie(movie)
+                    isFavorite.value = !isFavorite.value  // Toggle the favorite state
                 }
             ) {
-                Text(
-                    text = if (isFavorite.value) "❤️" else "🤍", // Heart emoji for favorite state
-                    fontSize = 32.sp
+                Icon(
+                    imageVector = Icons.Filled.Favorite,
+                    contentDescription = "Favorite",
+                    tint = if (isFavorite.value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
                 )
             }
         }
@@ -141,9 +146,6 @@ fun MovieDetailsContent(
         ) {
             Text("Back")
         }
-
     }
 }
-
-
 

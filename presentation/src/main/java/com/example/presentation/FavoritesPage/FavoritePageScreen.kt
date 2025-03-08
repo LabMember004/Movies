@@ -1,9 +1,11 @@
 package com.example.presentation.FavoritesPage
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -24,13 +26,35 @@ import com.example.ourmovies.presentation.viewModels.FavoriteViewModel
 fun FavoritePageScreen(
     favoriteViewModel: FavoriteViewModel = hiltViewModel()
 ) {
-    val favoriteMovies = favoriteViewModel.favoriteMovies.collectAsState().value
+    val favoriteMovies = favoriteViewModel.favoriteMovies.value
 
-   LaunchedEffect(Unit) {
-       favoriteViewModel.favoriteMovies
-   }
+    LaunchedEffect(Unit) {
+        Log.d("FavoritePageScreen", "Fetching favorite movies...")
+        favoriteViewModel.fetchFavoriteMovies()
+    }
 
+    Column(modifier = Modifier.fillMaxSize()) {
+        if (favoriteViewModel.isLoading.value) {
+            Text(text = "Loading favorites...")
+            Log.d("FavoritePageScreen", "Loading state active")
+        } else {
+            favoriteViewModel.errorMessage.value.let { error ->
+                if (error.isNotEmpty()) {
+                    Text(text = "Error: $error")
+                    Log.e("FavoritePageScreen", "Error occurred: $error")
+                }
+            }
+
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(favoriteMovies) { movie ->
+                    FavoriteMovieItem(movie)
+                    Log.d("FavoritePageScreen", "Displaying favorite: ${movie.title}")
+                }
+            }
+        }
+    }
 }
+
 
 @Composable
 fun FavoriteMovieItem(movie: Movies) {
@@ -72,3 +96,5 @@ fun FavoriteMovieItem(movie: Movies) {
         }
     }
 }
+
+
