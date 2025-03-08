@@ -29,19 +29,15 @@ class FavoriteViewModel @Inject constructor(
     fun fetchFavoriteMovies() {
         viewModelScope.launch {
             isLoading.value = true
-            Log.d("FavoriteViewModel", "Fetching favorite movies...")
             try {
                 val result = getFavoriteUseCase()
                 result.onSuccess { movies ->
                     favoriteMovies.value = movies
-                    Log.d("FavoriteViewModel", "Fetched ${movies.size} favorite movies")
                 }.onFailure {
                     errorMessage.value = it.localizedMessage ?: "Unknown error"
-                    Log.e("FavoriteViewModel", "Error fetching favorites: ${it.localizedMessage}")
                 }
             } catch (e: Exception) {
                 errorMessage.value = e.message ?: "Unknown error"
-                Log.e("FavoriteViewModel", "Exception: ${e.message}")
             } finally {
                 isLoading.value = false
             }
@@ -51,27 +47,22 @@ class FavoriteViewModel @Inject constructor(
     fun addFavoriteMovie(movie: Movies) {
         viewModelScope.launch {
             isLoading.value = true
-            Log.d("FavoriteViewModel", "Adding movie ${movie.title} to favorites...")
             try {
                 tokenRepository.getToken().collect { token ->
                     if (!token.isNullOrEmpty()) {
                         val request = FavoriteRequest(movie.id)
                         val result = addToFavoriteUseCase(request)
                         result.onSuccess {
-                            Log.d("FavoriteViewModel", "Successfully added ${movie.title} to favorites.")
                             fetchFavoriteMovies() // Refresh list
                         }.onFailure {
                             errorMessage.value = it.localizedMessage ?: "Unknown error"
-                            Log.e("FavoriteViewModel", "Failed to add favorite: ${it.localizedMessage}")
                         }
                     } else {
                         errorMessage.value = "Token is not available"
-                        Log.e("FavoriteViewModel", "Token not available.")
                     }
                 }
             } catch (e: Exception) {
                 errorMessage.value = e.message ?: "Unknown error"
-                Log.e("FavoriteViewModel", "Exception: ${e.message}")
             } finally {
                 isLoading.value = false
             }

@@ -45,17 +45,13 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun addToFavorites(request: FavoriteRequest): Result<Unit> {
         return try {
             val response = movieApiService.addToFavorites(request.toFavoriteRequestDTO())
-            Log.d("MovieRepositoryImpl", "Response Code: ${response.code()}")
-            Log.d("MovieRepositoryImpl", "Response Body: ${response.errorBody()?.string() ?: "No Error"}")
+
             if (response.isSuccessful) {
-                Log.d("MovieRepositoryImpl", "Favorite added successfully")
                 Result.success(Unit)
             } else {
-                Log.e("MovieRepositoryImpl", "Failed to add favorite: ${response.errorBody()?.string()}")
                 Result.failure(Exception("Failed to add to favorites: ${response.errorBody()?.string()}"))
             }
         } catch (e: Exception) {
-            Log.e("MovieRepositoryImpl", "Exception while adding favorite: ${e.message}")
             Result.failure(e)
         }
     }

@@ -21,19 +21,15 @@ class UserRepositoryImpl @Inject constructor(
         return try {
             val registerRequestDTO = registerRequest.toRegisterRequestDTO()
 
-            println(" Sending Register Request: $registerRequestDTO")
 
             val response = movieApiService.register(registerRequestDTO)
 
-            println(" API Response: $response")
 
             Result.success(response.toRegisterResponse())
         } catch (e: retrofit2.HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
-            println(" API Error (${e.code()}): $errorBody")
             Result.failure(Exception(errorBody ?: "Unknown error"))
         } catch (e: Exception) {
-            println(" Unexpected Error: ${e.message}")
             Result.failure(e)
         }
     }

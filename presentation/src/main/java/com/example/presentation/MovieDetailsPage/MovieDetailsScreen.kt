@@ -49,13 +49,8 @@ fun MovieDetailsScreen(
     val movie = viewModel.data.collectAsState().value.find { it.id == movieId }
 
     LaunchedEffect(movieId) {
-        Log.d("MovieDetailsScreen", "Movie ID: $movieId, Fetching details...")
-        if (movie == null) {
             viewModel.fetchMovies(1)
-            Log.d("MovieDetailsScreen", "Fetching movie list because movie is null")
-        } else {
-            Log.d("MovieDetailsScreen", "Movie found: ${movie.title}")
-        }
+
     }
 
     val isFavorite = remember { mutableStateOf(false) }
@@ -103,11 +98,10 @@ fun MovieDetailsContent(
                 modifier = Modifier.weight(1f)
             )
 
-            // Heart icon to favorite/unfavorite the movie
             IconButton(
                 onClick = {
                     favoriteViewModel.addFavoriteMovie(movie)
-                    isFavorite.value = !isFavorite.value  // Toggle the favorite state
+                    isFavorite.value = !isFavorite.value
                 }
             ) {
                 Icon(

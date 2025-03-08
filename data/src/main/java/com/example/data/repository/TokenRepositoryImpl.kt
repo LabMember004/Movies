@@ -16,10 +16,10 @@ class TokenRepositoryImpl @Inject constructor(
 
     override suspend fun saveToken(token: String) {
         TokenManager.saveToken(context, token)
-        tokenFlow.value = token // ✅ Update Flow with new token
+        tokenFlow.value = token
     }
 
     override fun getToken(): Flow<String?> = flow {
-        emit(TokenManager.getToken(context)) // ✅ Convert stored token to Flow
+        emit(TokenManager.getToken(context))
     }
 }
