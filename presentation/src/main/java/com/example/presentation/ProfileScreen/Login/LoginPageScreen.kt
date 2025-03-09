@@ -1,5 +1,6 @@
 package com.example.presentation.ProfileScreen.Login
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -44,6 +45,12 @@ fun LoginPageScreen(
     LaunchedEffect(loginState.value) {
         loginState.value?.onSuccess {
             Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
+
+            val sharedPreferences = context.getSharedPreferences("users+prefs" , Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+
+            editor.putString("USER_EMAIL" , email)
+            editor.apply()
         }
         loginState.value?.onFailure {
             Toast.makeText(context, "Login Failed: ${it.message}", Toast.LENGTH_SHORT).show()

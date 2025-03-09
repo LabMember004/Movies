@@ -1,5 +1,6 @@
 package com.example.presentation.ProfileScreen.Register
 
+import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -10,6 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+
 
 @Composable
 fun ProfilePageScreen(viewModel: RegisterViewModel = hiltViewModel() , onNavigateToRegister : () -> Unit, onRegisterSuccessful: () -> Unit) {
@@ -34,6 +36,8 @@ fun ProfilePageScreen(viewModel: RegisterViewModel = hiltViewModel() , onNavigat
         Button(onClick = {
             viewModel.registerUser(name, email, password, confirmPassword)
             onRegisterSuccessful()
+
+
         }) {
             Text("Register")
         }

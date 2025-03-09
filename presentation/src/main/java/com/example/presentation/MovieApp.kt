@@ -65,7 +65,7 @@ fun MovieApp() {
                 onRegisterSuccessful = {navController.navigate(Screen.Login.route)}
             ) }
 
-            composable(route = Screen.Home.route) { HomePageScreen() }
+            composable(route = Screen.Home.route) { HomePageScreen(navController = navController) }
 
             composable(route = Screen.Browse.route) {
                 BrowsePageScreen(navController = navController)

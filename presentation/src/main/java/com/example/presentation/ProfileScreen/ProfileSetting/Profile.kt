@@ -35,7 +35,6 @@ fun Profile(
     val userEmail = remember {
         mutableStateOf(sharedPreferences.getString("USER_EMAIL" , "Unknown User")?: "Unknown User")
     }
-    val userName = sharedPreferences.getString("USER_NAME" , "Unknown User") ?: "Unknown User"
 
     LaunchedEffect(userEmail.value) {
         userEmail.value = sharedPreferences.getString("USER_EMAIL", "Unknown User") ?: "Unknown user"
@@ -65,7 +64,6 @@ fun Profile(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(text = "Name: $userName")
             Text(text = "Email: ${userEmail.value}")
 
             Spacer(modifier = Modifier.height(16.dp))

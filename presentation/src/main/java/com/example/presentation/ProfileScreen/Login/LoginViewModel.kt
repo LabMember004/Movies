@@ -51,13 +51,5 @@ class LoginViewModel @Inject constructor(
 
     }
 
-    fun getToken() {
-        viewModelScope.launch {
-            tokenUseCase.getToken().collectLatest {
-                Log.d("LoginViewModel", "Token fetched in ViewModel: $it")
 
-                _tokenState.value = it
-            }
-        }
-    }
 }

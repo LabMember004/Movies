@@ -23,6 +23,8 @@ class RegisterViewModel @Inject constructor(
             try {
                 val result = registerUseCase(name, email, password, confirmPassword)
                 _registerState.value = result
+
+
             } catch (e: Exception) {
                 _registerState.value = Result.failure(e)
                 println("Registration Error: ${e.message}")
