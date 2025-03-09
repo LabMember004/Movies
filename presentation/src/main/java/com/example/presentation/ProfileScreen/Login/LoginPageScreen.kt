@@ -2,6 +2,7 @@ package com.example.presentation.ProfileScreen.Login
 
 import android.widget.Toast
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
@@ -17,13 +18,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 
 @Composable
 fun LoginPageScreen(
-    viewModel: LoginViewModel = hiltViewModel()
+    viewModel: LoginViewModel = hiltViewModel(),
+    onLoginSuccess: () -> Unit,
+    onNavigateToRegister: () -> Unit,
+    navController: NavController
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -102,10 +108,21 @@ fun LoginPageScreen(
         Button(
             onClick = {
                 viewModel.loginUser(email, password)
+                onLoginSuccess()
             },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = "Login")
         }
+        Text("Dont have an account?")
+
+        Text(
+            text= "Register",
+            color = Color.Blue,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.clickable {
+                onNavigateToRegister()
+            }
+        )
     }
 }

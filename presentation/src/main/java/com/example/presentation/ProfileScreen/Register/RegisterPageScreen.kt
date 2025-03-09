@@ -12,7 +12,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 
 @Composable
-fun ProfilePageScreen(viewModel: RegisterViewModel = hiltViewModel() , onNavigateToRegister : () -> Unit) {
+fun ProfilePageScreen(viewModel: RegisterViewModel = hiltViewModel() , onNavigateToRegister : () -> Unit, onRegisterSuccessful: () -> Unit) {
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -33,6 +33,7 @@ fun ProfilePageScreen(viewModel: RegisterViewModel = hiltViewModel() , onNavigat
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
             viewModel.registerUser(name, email, password, confirmPassword)
+            onRegisterSuccessful()
         }) {
             Text("Register")
         }

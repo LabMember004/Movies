@@ -5,6 +5,7 @@ enum class Screen(val route: String) {
     Home("home"),
     Favorite("favorite"),
     Profile("profile"),
-    Login("login")
+    Login("login"),
+    Register("register")
 
 }
