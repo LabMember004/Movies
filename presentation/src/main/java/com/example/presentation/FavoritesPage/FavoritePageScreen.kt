@@ -1,13 +1,19 @@
 package com.example.presentation.FavoritesPage
 
+import android.graphics.drawable.Icon
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SegmentedButtonDefaults.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -20,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.example.domain.entity.Movies
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ourmovies.presentation.viewModels.FavoriteViewModel
 
 @Composable
@@ -29,14 +36,12 @@ fun FavoritePageScreen(
     val favoriteMovies = favoriteViewModel.favoriteMovies.value
 
     LaunchedEffect(Unit) {
-        Log.d("FavoritePageScreen", "Fetching favorite movies...")
         favoriteViewModel.fetchFavoriteMovies()
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
         if (favoriteViewModel.isLoading.value) {
             Text(text = "Loading favorites...")
-            Log.d("FavoritePageScreen", "Loading state active")
         } else {
             favoriteViewModel.errorMessage.value.let { error ->
                 if (error.isNotEmpty()) {
@@ -47,7 +52,7 @@ fun FavoritePageScreen(
 
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(favoriteMovies) { movie ->
-                    FavoriteMovieItem(movie)
+                    FavoriteMovieItem(movie , favoriteViewModel)
                     Log.d("FavoritePageScreen", "Displaying favorite: ${movie.title}")
                 }
             }
@@ -57,7 +62,7 @@ fun FavoritePageScreen(
 
 
 @Composable
-fun FavoriteMovieItem(movie: Movies) {
+fun FavoriteMovieItem(movie: Movies , viewModel: FavoriteViewModel) {
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -91,6 +96,17 @@ fun FavoriteMovieItem(movie: Movies) {
             Text(
                 text = "Rating: ${movie.rating}/10",
             )
+
+            IconButton(
+                onClick = { viewModel.deleteFavoriteMovie(movie.id) }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Delete,
+                    contentDescription = "Delete"
+
+
+                )
+            }
 
             Spacer(modifier = Modifier.height(4.dp))
         }

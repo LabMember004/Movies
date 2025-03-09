@@ -2,7 +2,7 @@ package com.example.domain.useCase
 
 
 import android.util.Log
-import com.example.domain.TokenRepositoryDomain
+import com.example.domain.repository.TokenRepositoryDomain
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject

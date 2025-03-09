@@ -10,7 +10,7 @@ object TokenManager {
 
     fun saveToken(context: Context, token: String?) {
         if (token.isNullOrEmpty()) {
-            Log.e("TokenManager", "Attempted to save a null/empty token! Skipping...")
+            Log.e("TokenManager", "Attempted to save a null/empty token")
             return
         }
         val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)

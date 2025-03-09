@@ -2,7 +2,7 @@ package com.example.data.repository
 
 import android.content.Context
 import com.example.data.TokenManager
-import com.example.domain.TokenRepositoryDomain
+import com.example.domain.repository.TokenRepositoryDomain
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow

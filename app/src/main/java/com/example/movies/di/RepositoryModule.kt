@@ -5,7 +5,7 @@ import com.example.data.netwok.MovieApiService
 import com.example.data.repository.MovieRepositoryImpl
 import com.example.data.repository.TokenRepositoryImpl
 import com.example.data.repository.UserRepositoryImpl
-import com.example.domain.TokenRepositoryDomain
+import com.example.domain.repository.TokenRepositoryDomain
 import com.example.domain.repository.MovieRepository
 import com.example.domain.repository.UserRepository
 import com.example.domain.useCase.GetMoviesUseCase

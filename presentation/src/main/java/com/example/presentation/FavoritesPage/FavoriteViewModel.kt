@@ -1,17 +1,16 @@
 package com.example.ourmovies.presentation.viewModels
 
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.TokenRepositoryDomain
+import com.example.domain.repository.TokenRepositoryDomain
 import com.example.domain.entity.FavoriteRequest
 import com.example.domain.entity.Movies
 import com.example.domain.useCase.AddToFavoriteUseCase
+import com.example.domain.useCase.DeleteFavoriteUseCase
 import com.example.domain.useCase.GetFavoriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,6 +18,7 @@ import javax.inject.Inject
 class FavoriteViewModel @Inject constructor(
     private val addToFavoriteUseCase: AddToFavoriteUseCase,
     private val getFavoriteUseCase: GetFavoriteUseCase,
+    private val deleteFavoriteUseCase: DeleteFavoriteUseCase,
     private val tokenRepository: TokenRepositoryDomain
 ) : ViewModel() {
 
@@ -53,7 +53,7 @@ class FavoriteViewModel @Inject constructor(
                         val request = FavoriteRequest(movie.id)
                         val result = addToFavoriteUseCase(request)
                         result.onSuccess {
-                            fetchFavoriteMovies() // Refresh list
+                            fetchFavoriteMovies()
                         }.onFailure {
                             errorMessage.value = it.localizedMessage ?: "Unknown error"
                         }
@@ -65,6 +65,25 @@ class FavoriteViewModel @Inject constructor(
                 errorMessage.value = e.message ?: "Unknown error"
             } finally {
                 isLoading.value = false
+            }
+        }
+    }
+    fun deleteFavoriteMovie(favoriteId:String) {
+        viewModelScope.launch {
+            try {
+                val result = deleteFavoriteUseCase(favoriteId)
+                result.onSuccess {
+                    fetchFavoriteMovies()
+                }.onFailure {
+                    errorMessage.value = it.localizedMessage?: "Failed To Delete Movie"
+                }
+
+
+
+            } catch (e:Exception) {
+                Log.e("FavoriteViewModel" , "Error deleting favorite: ${e.message}")
+                errorMessage.value = e.localizedMessage ?: "Unknown error"
+
             }
         }
     }
