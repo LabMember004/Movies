@@ -20,6 +20,7 @@ import com.example.presentation.HomePage.HomePageScreen
 import com.example.presentation.MovieDetailsPage.MovieDetailsScreen
 import com.example.presentation.ProfileScreen.Login.LoginPageScreen
 import com.example.presentation.ProfileScreen.ProfileSetting.Profile
+import com.example.presentation.ProfileScreen.ProfileSetting.UpdateEmail.UpdateEmailScreen
 import com.example.presentation.ProfileScreen.Register.ProfilePageScreen
 import com.example.presentation.navbar.BottomNavBar
 import com.example.presentation.navigation.Screen
@@ -83,7 +84,11 @@ fun MovieApp() {
             composable(route = Screen.Favorite.route) { FavoritePageScreen() }
 
             composable(route = Screen.Profile.route) {
-                Profile(navController = navController)
+                Profile(navController = navController, onNavigateToSetting = {navController.navigate(Screen.UpdateEmail.route)})
+            }
+
+            composable(route = Screen.UpdateEmail.route) {
+                UpdateEmailScreen()
             }
 
         }

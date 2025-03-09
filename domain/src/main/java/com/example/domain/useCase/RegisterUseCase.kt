@@ -16,6 +16,8 @@ class RegisterUseCase @Inject constructor(
         password: String,
         confirmPassword: String
     ): Result<RegisterResponse> {
+
+
         return userRepository.register(RegisterRequest(name, email, password, confirmPassword))
     }
 

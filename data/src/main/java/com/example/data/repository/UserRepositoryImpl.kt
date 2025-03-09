@@ -4,11 +4,16 @@ import com.example.data.mapper.toLoginRequestDTO
 import com.example.data.mapper.toLoginResponse
 import com.example.data.mapper.toRegisterRequestDTO
 import com.example.data.mapper.toRegisterResponse
+import com.example.data.mapper.toUpdateEmailRequestDTO
+import com.example.data.mapper.toUpdateEmailResponse
+import com.example.data.model.UpdateEmailRequestDTO
 import com.example.data.netwok.MovieApiService
 import com.example.domain.entity.LoginRequest
 import com.example.domain.entity.LoginResponse
 import com.example.domain.entity.RegisterRequest
 import com.example.domain.entity.RegisterResponse
+import com.example.domain.entity.UpdateEmailRequest
+import com.example.domain.entity.UpdateEmailResponse
 import com.example.domain.repository.MovieRepository
 import com.example.domain.repository.UserRepository
 import javax.inject.Inject
@@ -49,4 +54,30 @@ class UserRepositoryImpl @Inject constructor(
 
         }
     }
+
+    override suspend fun updateEmail(updateEmailRequest: UpdateEmailRequest): Result<UpdateEmailResponse> {
+        return try {
+            val updateEmailRequestDTO = updateEmailRequest.toUpdateEmailRequestDTO()
+
+            // Call the API to update email
+            val response = movieApiService.updateEmail(updateEmailRequestDTO)
+
+            if (response.isSuccessful) {
+                response.body()?.let { responseBody ->
+                    Result.success(responseBody.toUpdateEmailResponse())
+                } ?: Result.failure(Exception("Empty response body"))
+            } else {
+                Result.failure(Exception("Error: ${response.message()}"))
+            }
+        } catch (e: retrofit2.HttpException) {
+            // Handle HTTP exception (e.g., 404, 500 errors)
+            val errorBody = e.response()?.errorBody()?.string()
+            Result.failure(Exception(errorBody ?: "Unknown HTTP error"))
+        } catch (e: Exception) {
+            // Handle other exceptions (e.g., network failure, parsing errors)
+            Result.failure(e)
+        }
+    }
+
+
 }

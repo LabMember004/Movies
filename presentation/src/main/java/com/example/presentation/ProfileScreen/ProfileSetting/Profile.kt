@@ -26,7 +26,8 @@ import androidx.navigation.NavController
 
 @Composable
 fun Profile(
-    navController: NavController
+    navController: NavController,
+    onNavigateToSetting: () -> Unit
 ) {
 
     val context = LocalContext.current
@@ -42,7 +43,7 @@ fun Profile(
 
     Box(modifier = Modifier.fillMaxSize()) {
         IconButton(
-            onClick = { },
+            onClick = { onNavigateToSetting() },
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(16.dp)

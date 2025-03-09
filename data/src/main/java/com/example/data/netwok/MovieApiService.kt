@@ -8,6 +8,10 @@ import com.example.data.model.LoginResponseDTO
 import com.example.data.model.RegisterRequestDTO
 import com.example.data.model.RegisterResponseDTO
 import com.example.data.model.SectionResponseDTO
+import com.example.data.model.UpdateEmailRequestDTO
+import com.example.data.model.UpdateEmailResponseDTO
+import com.example.data.model.UpdatePasswordRequestDTO
+import com.example.data.model.UpdatePasswordResponseDTO
 import com.example.domain.entity.Movies
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -16,6 +20,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -46,13 +51,28 @@ suspend fun addToFavorites(
     @Body request: FavoriteRequestDTO
 ): Response<Unit>
 
-    @GET("favorites")
-    suspend fun getFavorites(): Response<List<AllMovies>>
+@GET("favorites")
+suspend fun getFavorites(): Response<List<AllMovies>>
+@DELETE("favorites/{favoriteId}")
 
-    @DELETE("favorites/{favoriteId}")
-    suspend fun deleteFavorite(
+suspend fun deleteFavorite(
         @Path("favoriteId") favoriteId: String,
-    ): Response<ResponseBody>
+        ): Response<ResponseBody>
+
+@PATCH("me")
+suspend fun updateEmail(
+    @Body request: UpdateEmailRequestDTO
+): Response<UpdateEmailResponseDTO>
+
+@PATCH("me/password")
+suspend fun updatePassword(
+    @Body request: UpdatePasswordRequestDTO
+): Response<UpdatePasswordResponseDTO>
+
+@DELETE("me")
+suspend fun deleteProfile(
+
+): Response<Unit>
 
 
 }
