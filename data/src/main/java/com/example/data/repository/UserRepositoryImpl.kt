@@ -59,7 +59,6 @@ class UserRepositoryImpl @Inject constructor(
         return try {
             val updateEmailRequestDTO = updateEmailRequest.toUpdateEmailRequestDTO()
 
-            // Call the API to update email
             val response = movieApiService.updateEmail(updateEmailRequestDTO)
 
             if (response.isSuccessful) {
@@ -70,11 +69,9 @@ class UserRepositoryImpl @Inject constructor(
                 Result.failure(Exception("Error: ${response.message()}"))
             }
         } catch (e: retrofit2.HttpException) {
-            // Handle HTTP exception (e.g., 404, 500 errors)
             val errorBody = e.response()?.errorBody()?.string()
             Result.failure(Exception(errorBody ?: "Unknown HTTP error"))
         } catch (e: Exception) {
-            // Handle other exceptions (e.g., network failure, parsing errors)
             Result.failure(e)
         }
     }

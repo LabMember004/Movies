@@ -9,9 +9,9 @@ class UpdateEmailUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
 
-    suspend operator fun invoke(updateEmailRequest: UpdateEmailRequest): Result<UpdateEmailResponse> {
+    suspend operator fun invoke(updateEmailRequest: UpdateEmailRequest, token: String): Result<UpdateEmailResponse> {
         return try {
-            userRepository.updateEmail(updateEmailRequest)
+           userRepository.updateEmail(updateEmailRequest)
         } catch (e: Exception) {
             Result.failure(e)
         }

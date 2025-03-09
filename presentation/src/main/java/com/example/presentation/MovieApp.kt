@@ -88,7 +88,7 @@ fun MovieApp() {
             }
 
             composable(route = Screen.UpdateEmail.route) {
-                UpdateEmailScreen()
+                UpdateEmailScreen(navController = navController)
             }
 
         }

@@ -5,15 +5,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 @Composable
-fun UpdateEmailScreen(viewModel: UpdateEmailViewModel = hiltViewModel()) {
-    var currentEmail by remember { mutableStateOf("") }
-    var newEmail by remember { mutableStateOf("") }
-    var confirmNewEmail by remember { mutableStateOf("") }
-
-    val updateEmailResult by viewModel.updateEmailResult.collectAsState()
+fun UpdateEmailScreen(viewModel: UpdateEmailViewModel = hiltViewModel(), navController: NavController) {
+    var email by remember { mutableStateOf("") }
+    var message by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -22,39 +21,41 @@ fun UpdateEmailScreen(viewModel: UpdateEmailViewModel = hiltViewModel()) {
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         TextField(
-            value = currentEmail,
-            onValueChange = { currentEmail = it },
+            value = email,
+            onValueChange = { email = it },
             label = { Text("Current Email") },
             modifier = Modifier.fillMaxWidth()
         )
 
-        TextField(
-            value = newEmail,
-            onValueChange = { newEmail = it },
-            label = { Text("New Email") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        TextField(
-            value = confirmNewEmail,
-            onValueChange = { confirmNewEmail = it },
-            label = { Text("Confirm New Email") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Button(
-            onClick = { viewModel.updateEmail(newEmail) },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = newEmail.isNotBlank() && newEmail == confirmNewEmail
-        ) {
-            Text("Update Email")
+        // Show the success message in green and error message in red
+        if (message.isNotEmpty()) {
+            val messageColor = if (message.startsWith("Success")) Color.Green else Color.Red
+            Text(text = message, color = messageColor)
         }
 
-
-        updateEmailResult.getOrNull()?.let {
-            Text("Email updated successfully: ${it.message}", color = MaterialTheme.colorScheme.primary)
-        } ?: updateEmailResult.exceptionOrNull()?.let {
-            Text("Error: ${it.message}", color = MaterialTheme.colorScheme.error)
+        Button(
+            onClick = {
+                if (email.isNotEmpty()) {
+                    // Call the ViewModel to update the email
+                    viewModel.updateEmail(email) { isSuccess, responseMessage ->
+                        if (isSuccess) {
+                            message = "Success: Email successfully changed"
+                            // Use the `navController` to navigate to the profile screen after update
+                            navController.navigate("profile")
+                        } else {
+                            message = responseMessage
+                        }
+                    }
+                } else {
+                    message = "Email is required"
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(text = "Update email")
         }
     }
 }
+
+
+

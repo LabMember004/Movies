@@ -123,7 +123,6 @@ fun ProfilePageScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Register Button
             Button(
                 onClick = {
                     if (isRegistering) return@Button
