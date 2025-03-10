@@ -1,5 +1,6 @@
 package com.example.data.repository
 
+import android.util.Log
 import com.example.data.mapper.toLoginRequestDTO
 import com.example.data.mapper.toLoginResponse
 import com.example.data.mapper.toRegisterRequestDTO
@@ -97,6 +98,22 @@ class UserRepositoryImpl @Inject constructor(
             val errorBody = e.response()?.errorBody()?.string()
             Result.failure(Exception(errorBody ?: "Unknown HTTP error"))
         } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+    override suspend fun deleteProfile(): Result<Unit> {
+        return try {
+            val deleteProfile = movieApiService.deleteProfile()
+
+            if (deleteProfile.isSuccessful) {
+                Log.d("UserRepositoryImpl", "User deleted")
+                Result.success(Unit)
+            } else {
+                Log.d("UserRepositoryImpl", "Can't be deleted")
+                Result.failure(Exception("Failed to delete profile"))
+            }
+        } catch (e: Exception) {
+            Log.d("UserRepoImpl", "Error: ${e.message}")
             Result.failure(e)
         }
     }

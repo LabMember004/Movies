@@ -25,7 +25,6 @@ import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(
     private val movieApiService: MovieApiService,
-    private val tokenUseCase: TokenUseCase
 ): MovieRepository {
     override suspend fun getMovies(
         page: Int,

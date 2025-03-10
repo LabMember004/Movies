@@ -31,10 +31,7 @@ import com.example.presentation.navigation.Screen
 @Composable
 fun MovieApp() {
     val navController = rememberNavController()
-
     val isLoggedIn = remember { mutableStateOf(false) }
-
-
 
     val startDestination = if (isLoggedIn.value) Screen.Home.route else Screen.Login.route
 
@@ -53,65 +50,59 @@ fun MovieApp() {
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            composable(route = Screen.Login.route) { LoginPageScreen(onLoginSuccess = {
-                isLoggedIn.value = true
-                navController.navigate(Screen.Home.route) {
-                    popUpTo(Screen.Login.route) { inclusive = true }
-                }
-            },
-                navController = navController,
-                onNavigateToRegister = {navController.navigate(Screen.Register.route)}
-                ) }
-
-            composable(route = Screen.Register.route) { ProfilePageScreen(
-                onNavigateToRegister = { navController.navigate(Screen.Login.route) },
-                onRegisterSuccessful = {navController.navigate(Screen.Login.route)}
-            ) }
-
-            composable(route = Screen.Home.route) { HomePageScreen(navController = navController) }
-
-            composable(route = Screen.Browse.route) {
-                BrowsePageScreen(navController = navController)
-            }
-            composable(
-                route = "movieDetails/{movieId}",
-                arguments = listOf(navArgument("movieId") { type = NavType.StringType })
-            ) { backStackEntry ->
-                val movieId = backStackEntry.arguments?.getString("movieId") ?: ""
-                MovieDetailsScreen(
-                    movieId,
+            composable(route = Screen.Login.route) {
+                LoginPageScreen(
+                    onLoginSuccess = {
+                        isLoggedIn.value = true
+                        navController.navigate(Screen.Home.route) {
+                            popUpTo(Screen.Login.route) { inclusive = true }
+                        }
+                    },
                     navController = navController,
+                    onNavigateToRegister = { navController.navigate(Screen.Register.route) }
                 )
             }
-            composable(route = Screen.Favorite.route) { FavoritePageScreen(
-                onBackPressed = {navController.popBackStack()}
-            ) }
 
+            composable(route = Screen.Register.route) {
+                ProfilePageScreen(
+                    onNavigateToRegister = { navController.navigate(Screen.Login.route) },
+                    onRegisterSuccessful = { navController.navigate(Screen.Login.route) }
+                )
+            }
+
+            composable(route = Screen.Home.route) { HomePageScreen(navController = navController) }
             composable(route = Screen.Profile.route) {
-                Profile(navController = navController, onNavigateToSetting = {navController.navigate(Screen.ProfileSettingOptions.route)})
+                Profile(
+                    navController = navController,
+                    onNavigateToSetting = { navController.navigate(Screen.ProfileSettingOptions.route) }
+                )
             }
 
-            composable(route = Screen.UpdateEmail.route) {
-                UpdateEmailScreen(navController = navController, onPasswordChanged = {navController.navigate(Screen.Profile.route)})
-            }
 
             composable(route = Screen.ProfileSettingOptions.route) {
                 ProfileSettingOptionsPageScreen(
                     onNavigateToChangeEmail = {
                         navController.navigate(Screen.UpdateEmail.route)
-
                     },
-                    onNavigateToChangePassword = { navController.navigate(Screen.UpdatePassword.route) },
+                    onNavigateToChangePassword = {
+                        navController.navigate(Screen.UpdatePassword.route)
+                    },
                     navController = navController,
-                    onLogout = {}
+                    onLogout = {
+                        isLoggedIn.value = false
+                        navController.navigate(Screen.Login.route) {
+                            popUpTo(Screen.Home.route) { inclusive = true }
+                        }
+                    },
+                    onDelete = {
+                        navController.navigate(Screen.Login.route) {
+                            popUpTo(Screen.Home.route) { inclusive = true }
+                        }
+                    }
                 )
             }
-
-            composable(route = Screen.UpdatePassword.route) {
-                UpdatePasswordScreen(onPasswordChanged = {navController.navigate(Screen.Profile.route)})
-            }
-
         }
     }
 }
+
 

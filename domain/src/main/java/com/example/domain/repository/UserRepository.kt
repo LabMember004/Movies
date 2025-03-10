@@ -19,4 +19,6 @@ interface UserRepository {
 
     suspend fun updatePassword(updatePasswordRequest: UpdatePasswordRequest): Result<UpdatePasswordResponse>
 
+    suspend fun deleteProfile(): Result<Unit>
+
 }

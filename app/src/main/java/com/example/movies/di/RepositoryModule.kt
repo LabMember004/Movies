@@ -24,8 +24,8 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideMovieRepository(movieApiService: MovieApiService, tokenUseCase: TokenUseCase): MovieRepository {
-        return MovieRepositoryImpl(movieApiService, tokenUseCase)
+    fun provideMovieRepository(movieApiService: MovieApiService, ): MovieRepository {
+        return MovieRepositoryImpl(movieApiService)
     }
 
     @Provides
