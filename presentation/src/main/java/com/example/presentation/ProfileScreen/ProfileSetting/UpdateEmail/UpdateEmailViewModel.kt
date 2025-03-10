@@ -20,27 +20,18 @@ class UpdateEmailViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-
-    fun updateEmail(newEmail: String, callback: (Boolean, String) -> Unit) {
+    fun updateEmail(newEmail: String) {
         val updateEmailRequest = UpdateEmailRequest(newEmail)
 
         viewModelScope.launch {
-            try {
-                tokenRepository.getToken().collect { token ->
-                    if (!token.isNullOrEmpty()) {
 
-                        val result = updateEmailUseCase(updateEmailRequest, token)
-                        if (result.isSuccess) {
-                            callback(true, "Email updated successfully")
-                        } else {
-                            callback(false, "Failed to update email. Please try again.")
-                        }
-                    } else {
-                        callback(false, "Token is not available")
-                    }
+            tokenRepository.getToken().collect { token ->
+
+                if (token != null) {
+                    updateEmailUseCase(updateEmailRequest, token)
                 }
-            } catch (e: Exception) {
-                callback(false, "Network error: ${e.message}")
+
+
             }
         }
     }

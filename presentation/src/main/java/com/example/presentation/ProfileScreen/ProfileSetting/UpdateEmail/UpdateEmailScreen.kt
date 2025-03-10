@@ -8,11 +8,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import android.util.Patterns
 
 @Composable
-fun UpdateEmailScreen(viewModel: UpdateEmailViewModel = hiltViewModel(), navController: NavController) {
+fun UpdateEmailScreen(viewModel: UpdateEmailViewModel = hiltViewModel(), navController: NavController, onPasswordChanged: () -> Unit) {
     var email by remember { mutableStateOf("") }
     var message by remember { mutableStateOf("") }
+    var isSuccess by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -23,31 +25,30 @@ fun UpdateEmailScreen(viewModel: UpdateEmailViewModel = hiltViewModel(), navCont
         TextField(
             value = email,
             onValueChange = { email = it },
-            label = { Text("Current Email") },
+            label = { Text("New Email") },
             modifier = Modifier.fillMaxWidth()
         )
 
-        // Show the success message in green and error message in red
         if (message.isNotEmpty()) {
-            val messageColor = if (message.startsWith("Success")) Color.Green else Color.Red
+            val messageColor = if (isSuccess) Color.Green else Color.Red
             Text(text = message, color = messageColor)
         }
 
         Button(
             onClick = {
-                if (email.isNotEmpty()) {
-                    // Call the ViewModel to update the email
-                    viewModel.updateEmail(email) { isSuccess, responseMessage ->
-                        if (isSuccess) {
-                            message = "Success: Email successfully changed"
-                            // Use the `navController` to navigate to the profile screen after update
-                            navController.navigate("profile")
-                        } else {
-                            message = responseMessage
-                        }
-                    }
-                } else {
+                if (email.isBlank()) {
+                    isSuccess = false
                     message = "Email is required"
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    isSuccess = false
+                    message = "Please enter a valid email address"
+                } else {
+                   viewModel.updateEmail(email)
+                    isSuccess = true
+                    message = "Password Changed Successfully"
+                    onPasswordChanged()
+
+
                 }
             },
             modifier = Modifier.fillMaxWidth()
@@ -56,6 +57,3 @@ fun UpdateEmailScreen(viewModel: UpdateEmailViewModel = hiltViewModel(), navCont
         }
     }
 }
-
-
-

@@ -7,6 +7,8 @@ enum class Screen(val route: String) {
     Profile("profile"),
     Login("login"),
     Register("register"),
-    UpdateEmail("updateEmail")
+    UpdateEmail("updateEmail"),
+    ProfileSettingOptions("profileSettingOptions"),
+    UpdatePassword("updatePassword")
 
 }

@@ -20,7 +20,9 @@ import com.example.presentation.HomePage.HomePageScreen
 import com.example.presentation.MovieDetailsPage.MovieDetailsScreen
 import com.example.presentation.ProfileScreen.Login.LoginPageScreen
 import com.example.presentation.ProfileScreen.ProfileSetting.Profile
+import com.example.presentation.ProfileScreen.ProfileSetting.ProfileSettingOptionsPageScreen
 import com.example.presentation.ProfileScreen.ProfileSetting.UpdateEmail.UpdateEmailScreen
+import com.example.presentation.ProfileScreen.ProfileSetting.UpdatePassword.UpdatePasswordScreen
 import com.example.presentation.ProfileScreen.Register.ProfilePageScreen
 import com.example.presentation.navbar.BottomNavBar
 import com.example.presentation.navigation.Screen
@@ -86,11 +88,27 @@ fun MovieApp() {
             ) }
 
             composable(route = Screen.Profile.route) {
-                Profile(navController = navController, onNavigateToSetting = {navController.navigate(Screen.UpdateEmail.route)})
+                Profile(navController = navController, onNavigateToSetting = {navController.navigate(Screen.ProfileSettingOptions.route)})
             }
 
             composable(route = Screen.UpdateEmail.route) {
-                UpdateEmailScreen(navController = navController)
+                UpdateEmailScreen(navController = navController, onPasswordChanged = {navController.navigate(Screen.Profile.route)})
+            }
+
+            composable(route = Screen.ProfileSettingOptions.route) {
+                ProfileSettingOptionsPageScreen(
+                    onNavigateToChangeEmail = {
+                        navController.navigate(Screen.UpdateEmail.route)
+
+                    },
+                    onNavigateToChangePassword = { navController.navigate(Screen.UpdatePassword.route) },
+                    navController = navController,
+                    onLogout = {}
+                )
+            }
+
+            composable(route = Screen.UpdatePassword.route) {
+                UpdatePasswordScreen(onPasswordChanged = {navController.navigate(Screen.Profile.route)})
             }
 
         }

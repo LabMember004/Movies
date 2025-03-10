@@ -6,6 +6,8 @@ import com.example.data.mapper.toRegisterRequestDTO
 import com.example.data.mapper.toRegisterResponse
 import com.example.data.mapper.toUpdateEmailRequestDTO
 import com.example.data.mapper.toUpdateEmailResponse
+import com.example.data.mapper.toUpdatePasswordRequestDTO
+import com.example.data.mapper.toUpdatePasswordResponse
 import com.example.data.model.UpdateEmailRequestDTO
 import com.example.data.netwok.MovieApiService
 import com.example.domain.entity.LoginRequest
@@ -14,6 +16,8 @@ import com.example.domain.entity.RegisterRequest
 import com.example.domain.entity.RegisterResponse
 import com.example.domain.entity.UpdateEmailRequest
 import com.example.domain.entity.UpdateEmailResponse
+import com.example.domain.entity.UpdatePasswordRequest
+import com.example.domain.entity.UpdatePasswordResponse
 import com.example.domain.repository.MovieRepository
 import com.example.domain.repository.UserRepository
 import javax.inject.Inject
@@ -75,6 +79,28 @@ class UserRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
+
+    override suspend fun updatePassword(updatePasswordRequest: UpdatePasswordRequest): Result<UpdatePasswordResponse> {
+        return try {
+            val updatePasswordRequestDTO = updatePasswordRequest.toUpdatePasswordRequestDTO()
+
+            val response = movieApiService.updatePassword(updatePasswordRequestDTO)
+
+            if (response.isSuccessful) {
+                response.body()?.let { responseBody ->
+                    Result.success(responseBody.toUpdatePasswordResponse())
+                } ?: Result.failure(Exception("Empty response body"))
+            } else {
+                Result.failure(Exception("Error: ${response.message()}"))
+            }
+        } catch (e: retrofit2.HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            Result.failure(Exception(errorBody ?: "Unknown HTTP error"))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
 
 
 }
