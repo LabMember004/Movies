@@ -81,7 +81,9 @@ fun MovieApp() {
                     navController = navController,
                 )
             }
-            composable(route = Screen.Favorite.route) { FavoritePageScreen() }
+            composable(route = Screen.Favorite.route) { FavoritePageScreen(
+                onBackPressed = {navController.popBackStack()}
+            ) }
 
             composable(route = Screen.Profile.route) {
                 Profile(navController = navController, onNavigateToSetting = {navController.navigate(Screen.UpdateEmail.route)})
