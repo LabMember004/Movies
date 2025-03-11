@@ -64,4 +64,11 @@ class BrowsePageViewModel @Inject constructor(
             fetchMovies(currentPage +1)
         }
     }
+    fun applyFilter(genres: String? , releaseYear: Int? , query: String?) {
+        _data.value = emptyList()
+        currentPage = 1
+
+        isEndReached = false
+        fetchMovies(currentPage,query = query , genres = genres , releaseYear = releaseYear)
+    }
 }

@@ -77,6 +77,21 @@ fun MovieApp() {
                     onNavigateToSetting = { navController.navigate(Screen.ProfileSettingOptions.route) }
                 )
             }
+            composable(
+                route = "movieDetails/{movieId}",
+                arguments = listOf(navArgument("movieId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val movieId = backStackEntry.arguments?.getString("movieId") ?: return@composable
+                MovieDetailsScreen(movieId = movieId, navController = navController)
+            }
+
+
+            composable(route = Screen.Browse.route) {
+                BrowsePageScreen(navController = navController)
+            }
+            composable(route = Screen.Favorite.route) {
+                FavoritePageScreen(onBackPressed = {navController.popBackStack()})
+            }
 
 
             composable(route = Screen.ProfileSettingOptions.route) {
