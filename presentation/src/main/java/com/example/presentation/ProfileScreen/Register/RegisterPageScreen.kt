@@ -26,34 +26,29 @@ fun ProfilePageScreen(
     onNavigateToRegister: () -> Unit,
     onRegisterSuccessful: () -> Unit
 ) {
-    var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
+
     var resultText by remember { mutableStateOf("") }
     var isRegistrationSuccessful by remember { mutableStateOf(false) }
+
+    val uiState by viewModel.uiState.collectAsState()
 
     var isRegistering by remember { mutableStateOf(false) }
 
     LaunchedEffect(viewModel) {
-        viewModel.registerState.collect { result ->
-            if (result != null) {
-                result.fold(
-                    onSuccess = {
-                        resultText = "Registration successful"
-                        isRegistrationSuccessful = true
-                        isRegistering = false
-                        onRegisterSuccessful()
-                    },
-                    onFailure = {
-                        resultText = "Registration failed"
-                        isRegistrationSuccessful = false
-                        isRegistering = false
-                    }
-                )
+        viewModel.uiState.collect { uiState ->
+            if (uiState.isSuccess) {
+                resultText = "Registration successful"
+                isRegistrationSuccessful = true
+                isRegistering = false
+                onRegisterSuccessful()
+            } else if (uiState.errorMessage != null) {
+                resultText = "Registration failed: ${uiState.errorMessage}"
+                isRegistrationSuccessful = false
+                isRegistering = false
             }
         }
     }
+
 
     Box(
         modifier = Modifier
@@ -78,8 +73,8 @@ fun ProfilePageScreen(
             )
 
             OutlinedTextField(
-                value = name,
-                onValueChange = { name = it },
+                value = uiState.username,
+                onValueChange = viewModel::updateUsername,
                 label = { Text("Name") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -88,8 +83,8 @@ fun ProfilePageScreen(
             )
 
             OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
+                value = uiState.email,
+                onValueChange =  viewModel::updateEmail ,
                 label = { Text("Email") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -98,8 +93,8 @@ fun ProfilePageScreen(
             )
 
             OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
+                value = uiState.password,
+                onValueChange = viewModel::updatePassword,
                 label = { Text("Password") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -110,8 +105,8 @@ fun ProfilePageScreen(
             )
 
             OutlinedTextField(
-                value = confirmPassword,
-                onValueChange = { confirmPassword = it },
+                value = uiState.confirmPassword,
+                onValueChange = viewModel::updateConfirmPassword,
                 label = { Text("Confirm Password") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -125,29 +120,18 @@ fun ProfilePageScreen(
 
             Button(
                 onClick = {
-                    if (isRegistering) return@Button
-
-                    if (name.isEmpty()) {
-                        resultText = "Name is required"
-                    } else if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                        resultText = "Invalid email address"
-                    } else if (password.isEmpty()) {
-                        resultText = "Password is required"
-                    } else if (confirmPassword != password) {
-                        resultText = "Passwords do not match"
-                    } else {
+                    if (!isRegistering) {
                         isRegistering = true
-                        viewModel.registerUser(name, email, password, confirmPassword)
+                        viewModel.onClickRegister()
                     }
                 },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 12.dp),
+                modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8E24AA))
             ) {
                 Text("Register", color = Color.White)
             }
+
 
             Spacer(modifier = Modifier.height(16.dp))
             Text(
